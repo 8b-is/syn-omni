@@ -24,10 +24,11 @@ Omnimodal Embeddings*, EMNLP 2026 Findings), **Orthogonal Modality-Expert LoRA
 This module (`ome_lora_pq.py`) introduces hardware-aligned integer arithmetic
 for both OME-LoRA and PSR:
 
-1. **Quantum 64-Trit Bitplane LoRA (`QuantumTritMatrixPq`, `12.8x - 16x` smaller)**:
+1. **Quantum 64-Trit Bitplane LoRA (`QuantumTritMatrixPq`, `14.2x` smaller)**:
    - Packs every 64-element row block of `lora_A` and `lora_B` into two 64-bit
      bitmasks `(pos_mask: u64, neg_mask: u64)` plus a `Q16` scale (`16 B` bitmasks
-     per 64 weights vs `256 B` FP32).
+     per 64 weights vs `256 B` FP32; `36 B` per 128-wide row vs `512 B`, i.e.
+     `14.22x`, pinned by `test_bitplane_popcnt_orthogonality_and_compression`).
 2. **Bitplane `POPCNT` Orthogonality Gram Matrix & Structural Orthogonalization**:
    - The inner product between any two modality experts' $A$-matrices $A_m, A_n$
      is computed without a single floating-point multiply via bitwise `AND`/`OR`
